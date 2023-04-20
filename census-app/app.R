@@ -19,7 +19,8 @@ ui <- fluidPage(
     column(6,
            helpText("Create demographic maps with 
                     information from the 2010 US Census."),
-           
+           # linebreak
+           # br(),br(),br(),br(),
            selectInput("var",
                        label = "Choose a variable to display",
                        choices = c("Percent White",
@@ -37,13 +38,20 @@ ui <- fluidPage(
            textOutput("selected_var"),
            textOutput("selected_range"),
            plotOutput("map"),
-           
-           plotOutput(outputId = "distPlot"),
-           tableOutput("table")
            # textOutput("range_type")
     )
            
       
+  ),
+  
+  fluidRow(
+    column(6,
+           plotOutput(outputId = "distPlot")
+    ),
+    
+    column(6,
+           tableOutput("table")
+    )
   )
     
 )
