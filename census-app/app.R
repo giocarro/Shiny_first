@@ -47,46 +47,6 @@ ui <- fluidPage(
   )
     
 )
-  
-  # sidebarLayout(
-  #   sidebarPanel(
-      # helpText("Create demographic maps with
-      #          information from the 2010 US Census."),
-  #     
-      # selectInput("var",
-      #             label = "Choose a variable to display",
-      #             choices = c("Percent White",
-      #                         "Percent Black",
-      #                         "Percent Hispanic",
-      #                         "Percent Asian"),
-      #             selected = "Percent White"),
-  #     
-      # sliderInput("range",
-      #             label = "Range of interest:",
-      #             min = 0, max = 100, value = c(2, 80)),
-  #     
-  #     helpText("Here you can put more information")
-  #     
-  #   ),
-    
-    # mainPanel(
-    #   textOutput("selected_var"),
-    #   textOutput("selected_range"),
-    #   plotOutput("map"),
-    # 
-    #   plotOutput(outputId = "distPlot"),
-    #   tableOutput("table")
-    #   # textOutput("range_type")
-    # )
-  
-    # No funciona    
-    # fluidRow(
-    #   column(4,tableOutput("table")
-    #   )
-    # )
-    
-#   )
-# )
 
 server <- function(input, output) {
   
@@ -98,64 +58,23 @@ server <- function(input, output) {
     paste("You have chosen a range that goes from", min(input$range), "to", max(input$range) )
   })
 
-  # How to render a map with no reactive arguments
-  # output$map <- renderPlot({
-  #   percent_map(counties$white, "darkgreen", "% White")
-  #     })
-  
   # How to render a map with  reactive arguments
   output$map <- renderPlot({
     
-    # HOW I DID IT
-    # data <- switch(input$var, 
-    #                "Percent White" = counties$white,
-    #                "Percent Black" = counties$black,
-    #                "Percent Hispanic" = counties$hispanic,
-    #                "Percent Asian" = counties$asian)
-    # 
-    # percent_map(var = data,
-    #             color = "orange",
-    #             legend.title = input$var,
-    #             max = max(input$range),
-    #             min = min(input$range))
-    
-    # HOW IS BETTER
-    data <- switch(input$var, 
-                   "Percent White" = counties$white,
-                   "Percent Black" = counties$black,
-                   "Percent Hispanic" = counties$hispanic,
-                   "Percent Asian" = counties$asian)
-    
-    color <- switch(input$var, 
-                    "Percent White" = "darkgreen",
-                    "Percent Black" = "black",
-                    "Percent Hispanic" = "darkorange",
-                    "Percent Asian" = "darkviolet")
-    
-    legend <- switch(input$var, 
-                     "Percent White" = "% White",
-                     "Percent Black" = "% Black",
-                     "Percent Hispanic" = "% Hispanic",
-                     "Percent Asian" = "% Asian")
-    
-    percent_map(data, color, legend, input$range[1], input$range[2])
-    
     # MORE CONCISE
-    # args <- switch(input$var,
-    #                "Percent White" = list(counties$white, "darkgreen", "% White"),
-    #                "Percent Black" = list(counties$black, "black", "% Black"),
-    #                "Percent Hispanic" = list(counties$hispanic, "darkorange", "% Hispanic"),
-    #                "Percent Asian" = list(counties$asian, "darkviolet", "% Asian"))
-    # 
-    # args$min <- input$range[1]
-    # args$max <- input$range[2]
-    # 
-    # do.call(percent_map, args)
+    args <- switch(input$var,
+                   "Percent White" = list(counties$white, "darkgreen", "% White"),
+                   "Percent Black" = list(counties$black, "black", "% Black"),
+                   "Percent Hispanic" = list(counties$hispanic, "darkorange", "% Hispanic"),
+                   "Percent Asian" = list(counties$asian, "darkviolet", "% Asian"))
+
+    args$min <- input$range[1]
+    args$max <- input$range[2]
+    
+    do.call(percent_map, args)
   })
   
-  # source("census-app/helpers.R")
-  # counties <- readRDS("census-app/data/counties.rds")
-  
+  #Here is where the histogram goes
   output$distPlot <- renderPlot({
     
     x    <- switch (input$var,
@@ -175,7 +94,7 @@ server <- function(input, output) {
   })
   
   
-  #Here is where our analysis will show
+  #Here is where our analysis will show in the table
   output$table <- renderTable(
     dplyr::filter(counties, 
                            # white >= min(input$range) & white <= max(input$range))
@@ -193,23 +112,8 @@ server <- function(input, output) {
                          "Percent Hispanic" = "hispanic",
                          "Percent Asian" = "asian"
                  ))
-    #                total.pop,
-    #                white
-    #                # switch(input$var,
-    #                #        "Percent White" = "white",
-    #                #        "Percent Black" = "black",
-    #                #        "Percent Hispanic" = "hispanic",
-    #                #        "Percent Asian" = "asian")
-    #                )
-    
-    
-    
   )
 
-  
-  # output$range_type <- renderText({
-  #   str(input$range)
-  # })
 }
 
 shinyApp(ui = ui, server = server)
