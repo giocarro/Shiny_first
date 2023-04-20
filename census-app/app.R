@@ -15,36 +15,69 @@ df_counties <- data.frame(counties)
 ui <- fluidPage(
   titlePanel("censusVis"),
   
-  sidebarLayout(
-    sidebarPanel(
-      helpText("Create demographic maps with 
-               information from the 2010 US Census."),
-      
-      selectInput("var", 
-                  label = "Choose a variable to display",
-                  choices = c("Percent White", 
-                              "Percent Black",
-                              "Percent Hispanic", 
-                              "Percent Asian"),
-                  selected = "Percent White"),
-      
-      sliderInput("range", 
-                  label = "Range of interest:",
-                  min = 0, max = 100, value = c(2, 80)),
-      
-      helpText("Here you can put more information")
-      
+  fluidRow(
+    column(6,
+           helpText("Create demographic maps with 
+                    information from the 2010 US Census."),
+           
+           selectInput("var",
+                       label = "Choose a variable to display",
+                       choices = c("Percent White",
+                                   "Percent Black",
+                                   "Percent Hispanic",
+                                   "Percent Asian"),
+                       selected = "Percent White"),
+           
+           sliderInput("range",
+                       label = "Range of interest:",
+                       min = 0, max = 100, value = c(2, 80)),
     ),
     
-    mainPanel(
-      textOutput("selected_var"),
-      textOutput("selected_range"),
-      plotOutput("map"),
-      
-      plotOutput(outputId = "distPlot"),
-      tableOutput("table")
-      # textOutput("range_type")
+    column(6,
+           textOutput("selected_var"),
+           textOutput("selected_range"),
+           plotOutput("map"),
+           
+           plotOutput(outputId = "distPlot"),
+           tableOutput("table")
+           # textOutput("range_type")
     )
+           
+      
+  )
+    
+)
+  
+  # sidebarLayout(
+  #   sidebarPanel(
+      # helpText("Create demographic maps with
+      #          information from the 2010 US Census."),
+  #     
+      # selectInput("var",
+      #             label = "Choose a variable to display",
+      #             choices = c("Percent White",
+      #                         "Percent Black",
+      #                         "Percent Hispanic",
+      #                         "Percent Asian"),
+      #             selected = "Percent White"),
+  #     
+      # sliderInput("range",
+      #             label = "Range of interest:",
+      #             min = 0, max = 100, value = c(2, 80)),
+  #     
+  #     helpText("Here you can put more information")
+  #     
+  #   ),
+    
+    # mainPanel(
+    #   textOutput("selected_var"),
+    #   textOutput("selected_range"),
+    #   plotOutput("map"),
+    # 
+    #   plotOutput(outputId = "distPlot"),
+    #   tableOutput("table")
+    #   # textOutput("range_type")
+    # )
   
     # No funciona    
     # fluidRow(
@@ -52,8 +85,8 @@ ui <- fluidPage(
     #   )
     # )
     
-  )
-)
+#   )
+# )
 
 server <- function(input, output) {
   
